@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load static %}
+
+<!-- profile.html -->
+<h2>{{ user.username }}'s Profile</h2>
+{% if user.profile_picture %}
+  <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" width="150">
+{% else %}
+  <img src="{% static 'img/default_profile.png' %}" alt="Default Profile Picture" class="rounded-circle" width="150">
+{% endif %}
+
+<ul>
+  <li>Email: {{ user.email }}</li>
+  <li>Age: {{ user.age }}</li>
+  <li>Gender: {{ user.gender }}</li>
+  <li>Bio: {{ user.bio }}</li>
+</ul>
+
+<a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">Edit Profile</a>
+
+{% comment %} <div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Card -->
+            <div class="card shadow-sm rounded-4 p-4">
+                <div class="d-flex align-items-center">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" class="rounded-circle me-3" width="80" height="80">
+                    {% else %}
+                        <img src="{% static 'img/default-avatar.png' %}" class="rounded-circle me-3" width="80" height="80">
+                    {% endif %}
+                    <div>
+                        <h4 class="mb-0">{{ user.username }}</h4>
+                        <small class="text-muted">{{ user.email }}</small>
+                        <p class="mt-2 mb-0">{{ user.bio }}</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Profile Edit Form -->
+                <form method="POST" class="mt-3">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-primary mt-2">Update Profile</button>
+                </form>
+
+                <hr>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+                    <a href="#" class="btn btn-outline-secondary">My Bookings</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div> {% endcomment %}
+
+{% endblock %}
+

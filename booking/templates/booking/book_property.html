@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'booking/css/style1.css' %}">
+
+<h2>Book Your Stay at {{ property.name }}</h2>
+
+<form method="post" class="booking-form">
+    {% csrf_token %}
+
+    <!-- Property Details (readonly) -->
+    <div class="readonly-info">
+        <label>Property:</label>
+        <input type="text" value="{{ property.name }}" readonly>
+
+        <label>Location:</label>
+        <input type="text" value="{{ property.location }}" readonly>
+
+        <label>Price per Night:</label>
+        <input type="text" value="${{ property.price_per_night }}" readonly>
+    </div>
+
+    <!-- User Info (pre-fill if logged in) -->
+    <label for="name">Your Name</label>
+    <input type="text" name="name" id="name" value="{{ request.user.get_full_name }}" required>
+
+    <label for="email">Your Email</label>
+    <input type="email" name="email" id="email" value="{{ request.user.email }}" required>
+
+    <!-- Booking Dates -->
+    <label for="check_in">Check-in Date</label>
+    <input type="date" name="check_in" id="check_in" required>
+
+    <label for="check_out">Check-out Date</label>
+    <input type="date" name="check_out" id="check_out" required>
+
+    <!-- Optional Message -->
+    <label for="message">Special Requests</label>
+    <textarea name="message" id="message" rows="4" placeholder="Optional..."></textarea>
+
+    <!-- Submit -->
+    <button type="button" onclick="window.location.href='{% url 'book_property' property.id %}'" class="btn">Book Now</button>
+</form>
+<p id="total_price" style="margin-top: 15px; font-weight: bold;"></p>
+
+<script>
+    // Set min date for check-in and check-out to today
+    const today = new Date().toISOString().split('T')[0];
+    const checkInInput = document.getElementById('check_in');
+    const checkOutInput = document.getElementById('check_out');
+
+    checkInInput.setAttribute('min', today);
+    checkOutInput.setAttribute('min', today);
+
+    // Update check-out min when check-in changes
+    checkInInput.addEventListener('change', function () {
+        checkOutInput.min = this.value;
+        if (checkOutInput.value < this.value) {
+            checkOutInput.value = this.value;
+        }
+        calculateTotalPrice();
+    });
+
+    checkOutInput.addEventListener('change', calculateTotalPrice);
+
+    // Calculate price
+    function calculateTotalPrice() {
+        const checkInDate = new Date(checkInInput.value);
+        const checkOutDate = new Date(checkOutInput.value);
+        const pricePerNight = {{ property.price_per_night|safe }};
+        const totalPriceDisplay = document.getElementById('total_price');
+
+        if (checkInDate && checkOutDate && checkOutDate > checkInDate) {
+            const timeDiff = checkOutDate - checkInDate;
+            const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            const total = days * pricePerNight;
+            totalPriceDisplay.textContent = `Total Price: $${total}`;
+        } else {
+            totalPriceDisplay.textContent = '';
+        }
+    }
+</script>
+{% endblock %}

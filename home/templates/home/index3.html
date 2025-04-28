@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-light text-center py-5">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Find Your Perfect Stay</h1>
+    <p class="lead mb-4">Book hotels, apartments, and more — all in one place.</p>
+    <form class="row g-2 justify-content-center">
+      <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Where to?" />
+      </div>
+      <div class="col-md-3">
+        <input type="date" class="form-control" placeholder="Check-in" />
+      </div>
+      <div class="col-md-3">
+        <input type="date" class="form-control" placeholder="Check-out" />
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 text-center">
+  <div class="container">
+    <h2 class="mb-4">Why Book With Us?</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <i class="bi bi-house-door-fill display-4 text-primary mb-3"></i>
+        <h5>Wide Range of Stays</h5>
+        <p>From apartments to resorts, find options that suit every budget.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-shield-lock-fill display-4 text-primary mb-3"></i>
+        <h5>Secure Booking</h5>
+        <p>Instant confirmation and trusted payment methods.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-globe2 display-4 text-primary mb-3"></i>
+        <h5>Global Access</h5>
+        <p>Book anywhere in the world with ease.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-primary text-white py-5 text-center">
+  <div class="container">
+    <h3 class="mb-3">Ready to start your journey?</h3>
+    
+    {% if user.is_authenticated %}
+      <!-- If user is logged in, show a personalized message or account options -->
+      <p>Welcome back, {{ user.username }}!</p>
+      <a href="{% url 'profile' %}" class="btn btn-light btn-lg">Go to your Profile</a>
+    {% else %}
+      <!-- If user is not logged in, show the create account link -->
+      <a href="{% url 'register' %}" class="btn btn-light btn-lg">Create an Account</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
