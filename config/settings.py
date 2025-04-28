@@ -9,13 +9,20 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-from decouple import Config, Csv
+from decouple import Config, Csv, AutoConfig
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-config = Config()
+# repository = 'https://github.com/hazalkoom/booking_app'
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+
+# Initialize AutoConfig with the path to the .env file
+config = AutoConfig(search_path=env_path)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
